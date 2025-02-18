@@ -1,0 +1,158 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "user/interface/v1/interface.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "UserInterface"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/user/login": {
+      "post": {
+        "summary": "用户登录",
+        "operationId": "UserInterface_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "UserInterface"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "LoginReqSignedData": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "title": "钱包地址"
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "int64",
+          "title": "当前时间戳"
+        },
+        "client_id": {
+          "type": "string",
+          "title": "客户端ID"
+        },
+        "nonce": {
+          "type": "string",
+          "title": "随机数"
+        }
+      },
+      "required": [
+        "address",
+        "issued_at",
+        "client_id",
+        "nonce"
+      ]
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1LoginReply": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LoginReq": {
+      "type": "object",
+      "properties": {
+        "signed_data": {
+          "$ref": "#/definitions/LoginReqSignedData",
+          "title": "签名数据"
+        },
+        "os": {
+          "type": "string",
+          "title": "操作系统 e.g: windows"
+        },
+        "platform": {
+          "type": "string",
+          "title": "平台 e.g: Microsoft Windows 11 Pro"
+        },
+        "platform_version": {
+          "type": "string",
+          "title": "平台版本 e.g: 10.0.22631 Build 22631"
+        },
+        "kernel_version": {
+          "type": "string",
+          "title": "内核版本 e.g: 10.0.22631 Build 22631"
+        },
+        "kernel_arch": {
+          "type": "string",
+          "title": "内核架构 e.g: x86_64"
+        },
+        "hostname": {
+          "type": "string",
+          "title": "主机名 e.g: desktop-1vp50h1"
+        }
+      },
+      "required": [
+        "signed_data",
+        "os",
+        "platform",
+        "hostname"
+      ]
+    }
+  }
+}

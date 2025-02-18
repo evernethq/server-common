@@ -1,0 +1,76 @@
+run:
+  timeout: 5m
+
+linters:
+  disable-all: true
+  enable:
+    - gofumpt
+    - govet
+    - misspell
+    - revive
+    - lll
+
+linters-settings:
+  gofumpt:
+    extra-rules: true
+
+  lll:
+    line-length: 160
+    tab-width: 1
+
+  govet:
+    # Matches what we use in corp as of 2023-12-07
+    enable:
+      - asmdecl
+      - assign
+      - atomic
+      - bools
+      - buildtag
+      - cgocall
+      - copylocks
+      - deepequalerrors
+      - errorsas
+      - framepointer
+      - httpresponse
+      - ifaceassert
+      - loopclosure
+      - lostcancel
+      - nilfunc
+      - nilness
+      - printf
+      - reflectvaluecompare
+      - shift
+      - sigchanyzer
+      - sortslice
+      - stdmethods
+      - stringintconv
+      - structtag
+      - testinggoroutine
+      - tests
+      - unmarshal
+      - unreachable
+      - unsafeptr
+      - unusedresult
+
+  revive:
+    enable-all-rules: false
+    ignore-generated-header: true
+    rules:
+      - name: atomic
+      - name: context-keys-type
+      - name: defer
+        arguments: [ [
+          # Calling 'recover' at the time a defer is registered (i.e. "defer recover()") has no effect.
+          "immediate-recover",
+          # Calling 'recover' outside of a deferred function has no effect
+          "recover",
+          # Returning values from a deferred function has no effect
+          "return",
+        ] ]
+      - name: duplicated-imports
+      - name: errorf
+      - name: string-of-int
+      - name: time-equal
+      - name: unconditional-recursion
+      - name: useless-break
+      - name: waitgroup-by-value
