@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserInterface_Login_FullMethodName = "/server.user.interface.v1.UserInterface/Login"
+	UserInterface_Login_FullMethodName    = "/server.user.interface.v1.UserInterface/Login"
+	UserInterface_GetNonce_FullMethodName = "/server.user.interface.v1.UserInterface/GetNonce"
 )
 
 // UserInterfaceClient is the client API for UserInterface service.
@@ -28,6 +29,8 @@ const (
 type UserInterfaceClient interface {
 	// 用户登录
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginReply, error)
+	// 获取 Nonce
+	GetNonce(ctx context.Context, in *GetNonceReq, opts ...grpc.CallOption) (*GetNonceReply, error)
 }
 
 type userInterfaceClient struct {
@@ -48,12 +51,24 @@ func (c *userInterfaceClient) Login(ctx context.Context, in *LoginReq, opts ...g
 	return out, nil
 }
 
+func (c *userInterfaceClient) GetNonce(ctx context.Context, in *GetNonceReq, opts ...grpc.CallOption) (*GetNonceReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetNonceReply)
+	err := c.cc.Invoke(ctx, UserInterface_GetNonce_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserInterfaceServer is the server API for UserInterface service.
 // All implementations must embed UnimplementedUserInterfaceServer
 // for forward compatibility.
 type UserInterfaceServer interface {
 	// 用户登录
 	Login(context.Context, *LoginReq) (*LoginReply, error)
+	// 获取 Nonce
+	GetNonce(context.Context, *GetNonceReq) (*GetNonceReply, error)
 	mustEmbedUnimplementedUserInterfaceServer()
 }
 
@@ -66,6 +81,9 @@ type UnimplementedUserInterfaceServer struct{}
 
 func (UnimplementedUserInterfaceServer) Login(context.Context, *LoginReq) (*LoginReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedUserInterfaceServer) GetNonce(context.Context, *GetNonceReq) (*GetNonceReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNonce not implemented")
 }
 func (UnimplementedUserInterfaceServer) mustEmbedUnimplementedUserInterfaceServer() {}
 func (UnimplementedUserInterfaceServer) testEmbeddedByValue()                       {}
@@ -106,6 +124,24 @@ func _UserInterface_Login_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserInterface_GetNonce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNonceReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserInterfaceServer).GetNonce(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserInterface_GetNonce_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserInterfaceServer).GetNonce(ctx, req.(*GetNonceReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserInterface_ServiceDesc is the grpc.ServiceDesc for UserInterface service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -116,6 +152,10 @@ var UserInterface_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _UserInterface_Login_Handler,
+		},
+		{
+			MethodName: "GetNonce",
+			Handler:    _UserInterface_GetNonce_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

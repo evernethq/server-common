@@ -35,6 +35,218 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on GetNonceReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetNonceReq) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetNonceReq with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetNonceReqMultiError, or
+// nil if none found.
+func (m *GetNonceReq) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetNonceReq) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if utf8.RuneCountInString(m.GetClientId()) < 1 {
+		err := GetNonceReqValidationError{
+			field:  "ClientId",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return GetNonceReqMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetNonceReqMultiError is an error wrapping multiple validation errors
+// returned by GetNonceReq.ValidateAll() if the designated constraints aren't met.
+type GetNonceReqMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetNonceReqMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetNonceReqMultiError) AllErrors() []error { return m }
+
+// GetNonceReqValidationError is the validation error returned by
+// GetNonceReq.Validate if the designated constraints aren't met.
+type GetNonceReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetNonceReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetNonceReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetNonceReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetNonceReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetNonceReqValidationError) ErrorName() string { return "GetNonceReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetNonceReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetNonceReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetNonceReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetNonceReqValidationError{}
+
+// Validate checks the field values on GetNonceReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *GetNonceReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetNonceReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in GetNonceReplyMultiError, or
+// nil if none found.
+func (m *GetNonceReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetNonceReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Nonce
+
+	if len(errors) > 0 {
+		return GetNonceReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetNonceReplyMultiError is an error wrapping multiple validation errors
+// returned by GetNonceReply.ValidateAll() if the designated constraints
+// aren't met.
+type GetNonceReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetNonceReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetNonceReplyMultiError) AllErrors() []error { return m }
+
+// GetNonceReplyValidationError is the validation error returned by
+// GetNonceReply.Validate if the designated constraints aren't met.
+type GetNonceReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetNonceReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetNonceReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetNonceReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetNonceReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetNonceReplyValidationError) ErrorName() string { return "GetNonceReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetNonceReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetNonceReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetNonceReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetNonceReplyValidationError{}
+
 // Validate checks the field values on LoginReq with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.

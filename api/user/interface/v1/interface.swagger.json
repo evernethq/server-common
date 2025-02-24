@@ -48,6 +48,38 @@
           "UserInterface"
         ]
       }
+    },
+    "/v1/user/nonce": {
+      "get": {
+        "summary": "获取 Nonce",
+        "operationId": "UserInterface_GetNonce",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetNonceReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "client_id",
+            "description": "客户端ID",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "UserInterface"
+        ]
+      }
     }
   },
   "definitions": {
@@ -104,6 +136,14 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1GetNonceReply": {
+      "type": "object",
+      "properties": {
+        "nonce": {
+          "type": "string"
         }
       }
     },

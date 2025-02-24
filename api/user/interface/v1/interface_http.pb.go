@@ -19,9 +19,12 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationUserInterfaceGetNonce = "/server.user.interface.v1.UserInterface/GetNonce"
 const OperationUserInterfaceLogin = "/server.user.interface.v1.UserInterface/Login"
 
 type UserInterfaceHTTPServer interface {
+	// GetNonce 获取 Nonce
+	GetNonce(context.Context, *GetNonceReq) (*GetNonceReply, error)
 	// Login 用户登录
 	Login(context.Context, *LoginReq) (*LoginReply, error)
 }
@@ -29,6 +32,7 @@ type UserInterfaceHTTPServer interface {
 func RegisterUserInterfaceHTTPServer(s *http.Server, srv UserInterfaceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/user/login", _UserInterface_Login0_HTTP_Handler(srv))
+	r.GET("/v1/user/nonce", _UserInterface_GetNonce0_HTTP_Handler(srv))
 }
 
 func _UserInterface_Login0_HTTP_Handler(srv UserInterfaceHTTPServer) func(ctx http.Context) error {
@@ -53,7 +57,27 @@ func _UserInterface_Login0_HTTP_Handler(srv UserInterfaceHTTPServer) func(ctx ht
 	}
 }
 
+func _UserInterface_GetNonce0_HTTP_Handler(srv UserInterfaceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetNonceReq
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserInterfaceGetNonce)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetNonce(ctx, req.(*GetNonceReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetNonceReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserInterfaceHTTPClient interface {
+	GetNonce(ctx context.Context, req *GetNonceReq, opts ...http.CallOption) (rsp *GetNonceReply, err error)
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginReply, err error)
 }
 
@@ -63,6 +87,19 @@ type UserInterfaceHTTPClientImpl struct {
 
 func NewUserInterfaceHTTPClient(client *http.Client) UserInterfaceHTTPClient {
 	return &UserInterfaceHTTPClientImpl{client}
+}
+
+func (c *UserInterfaceHTTPClientImpl) GetNonce(ctx context.Context, in *GetNonceReq, opts ...http.CallOption) (*GetNonceReply, error) {
+	var out GetNonceReply
+	pattern := "/v1/user/nonce"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserInterfaceGetNonce))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 func (c *UserInterfaceHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...http.CallOption) (*LoginReply, error) {

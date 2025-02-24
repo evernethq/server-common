@@ -16,6 +16,20 @@ service UserInterface {
       body: "*"
     };
   }
+  // 获取 Nonce
+  rpc GetNonce(GetNonceReq) returns (GetNonceReply) {
+    option (google.api.http) = {
+      get: "/v1/user/nonce"
+    };
+  }
+}
+
+message GetNonceReq {
+  string client_id = 1 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1]; // 客户端ID
+}
+
+message GetNonceReply {
+  string nonce = 1;
 }
 
 message LoginReq {
