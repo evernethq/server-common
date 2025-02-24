@@ -66,3 +66,17 @@ func IsAuthenticationFailed(err error) bool {
 func ErrorAuthenticationFailed(format string, args ...interface{}) *errors.Error {
 	return errors.New(401, ErrorReason_AUTHENTICATION_FAILED.String(), fmt.Sprintf(format, args...))
 }
+
+// 系统时间与服务器时间差距过大
+func IsTimeSkewTooLarge(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_TIME_SKEW_TOO_LARGE.String() && e.Code == 400
+}
+
+// 系统时间与服务器时间差距过大
+func ErrorTimeSkewTooLarge(format string, args ...interface{}) *errors.Error {
+	return errors.New(400, ErrorReason_TIME_SKEW_TOO_LARGE.String(), fmt.Sprintf(format, args...))
+}

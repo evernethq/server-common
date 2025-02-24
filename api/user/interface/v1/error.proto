@@ -13,4 +13,5 @@ enum ErrorReason {
   NONCE_INVALID = 1 [(errors.code) = 400];  // Nonce 无效
   RATE_LIMIT_EXCEEDED = 2 [(errors.code) = 429];  // 请求频率超限
   AUTHENTICATION_FAILED = 3 [(errors.code) = 401];  // 验证失败
+  TIME_SKEW_TOO_LARGE = 4 [(errors.code) = 400];  // 系统时间与服务器时间差距过大
 }
