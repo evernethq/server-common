@@ -298,6 +298,17 @@ func (m *LoginReq) validate(all bool) error {
 		}
 	}
 
+	if utf8.RuneCountInString(m.GetSigHex()) < 1 {
+		err := LoginReqValidationError{
+			field:  "SigHex",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if utf8.RuneCountInString(m.GetOs()) < 1 {
 		err := LoginReqValidationError{
 			field:  "Os",

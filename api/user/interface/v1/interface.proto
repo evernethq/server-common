@@ -40,12 +40,13 @@ message LoginReq {
     string nonce = 4 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.len = 16]; // 随机数
   }
   SignedData signed_data = 1 [(google.api.field_behavior) = REQUIRED]; // 签名数据
-  string os = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1]; // 操作系统 e.g: windows
-  string platform = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1]; // 平台 e.g: Microsoft Windows 11 Pro
-  optional string platform_version = 4;  // 平台版本 e.g: 10.0.22631 Build 22631
-  optional string kernel_version = 5;  // 内核版本 e.g: 10.0.22631 Build 22631
-  optional string kernel_arch = 6;  // 内核架构 e.g: x86_64
-  string hostname = 7 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];  // 主机名 e.g: desktop-1vp50h1
+  string sig_hex = 2 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1]; // 签名
+  string os = 3 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1]; // 操作系统 e.g: windows
+  string platform = 4 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1]; // 平台 e.g: Microsoft Windows 11 Pro
+  optional string platform_version = 5;  // 平台版本 e.g: 10.0.22631 Build 22631
+  optional string kernel_version = 6;  // 内核版本 e.g: 10.0.22631 Build 22631
+  optional string kernel_arch = 7;  // 内核架构 e.g: x86_64
+  string hostname = 8 [(google.api.field_behavior) = REQUIRED, (validate.rules).string.min_len = 1];  // 主机名 e.g: desktop-1vp50h1
 }
 
 message LoginReply {

@@ -162,6 +162,10 @@
           "$ref": "#/definitions/LoginReqSignedData",
           "title": "签名数据"
         },
+        "sig_hex": {
+          "type": "string",
+          "title": "签名"
+        },
         "os": {
           "type": "string",
           "title": "操作系统 e.g: windows"
@@ -189,6 +193,7 @@
       },
       "required": [
         "signed_data",
+        "sig_hex",
         "os",
         "platform",
         "hostname"
