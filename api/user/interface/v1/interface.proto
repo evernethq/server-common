@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/api/field_behavior.proto";
 
-option go_package = "github.com/EverNETHQ/server/api/server/user/interface/v1;v1";
+option go_package = "github.com/evernethq/server-common/api/server/user/interface/v1;v1";
 
 service UserInterface {
   // 用户登录

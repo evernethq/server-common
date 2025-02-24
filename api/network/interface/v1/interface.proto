@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/api/field_behavior.proto";
 
-option go_package = "github.com/EverNETHQ/server/api/network/interface/v1;v1";
+option go_package = "github.com/evernethq/server-common/api/network/interface/v1;v1";
 
 service NetworkInterface {
   // 与 daemon 通讯的 stream 通道
