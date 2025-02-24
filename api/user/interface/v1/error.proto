@@ -9,5 +9,8 @@ option go_package = "github.com/evernethq/server-common/api/server/user/interfac
 enum ErrorReason {
   option (errors.default_code) = 500;
 
-  NONCE_ALREADY_EXISTS = 0;  // Nonce 已存在
+  NONCE_ALREADY_EXISTS = 0 [(errors.code) = 400];  // Nonce 已存在
+  NONCE_INVALID = 1 [(errors.code) = 400];  // Nonce 无效
+  RATE_LIMIT_EXCEEDED = 2 [(errors.code) = 429];  // 请求频率超限
+  AUTHENTICATION_FAILED = 3 [(errors.code) = 401];  // 验证失败
 }

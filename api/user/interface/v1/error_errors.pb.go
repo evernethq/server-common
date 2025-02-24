@@ -17,10 +17,52 @@ func IsNonceAlreadyExists(err error) bool {
 		return false
 	}
 	e := errors.FromError(err)
-	return e.Reason == ErrorReason_NONCE_ALREADY_EXISTS.String() && e.Code == 500
+	return e.Reason == ErrorReason_NONCE_ALREADY_EXISTS.String() && e.Code == 400
 }
 
 // Nonce 已存在
 func ErrorNonceAlreadyExists(format string, args ...interface{}) *errors.Error {
-	return errors.New(500, ErrorReason_NONCE_ALREADY_EXISTS.String(), fmt.Sprintf(format, args...))
+	return errors.New(400, ErrorReason_NONCE_ALREADY_EXISTS.String(), fmt.Sprintf(format, args...))
+}
+
+// Nonce 无效
+func IsNonceInvalid(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_NONCE_INVALID.String() && e.Code == 400
+}
+
+// Nonce 无效
+func ErrorNonceInvalid(format string, args ...interface{}) *errors.Error {
+	return errors.New(400, ErrorReason_NONCE_INVALID.String(), fmt.Sprintf(format, args...))
+}
+
+// 请求频率超限
+func IsRateLimitExceeded(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_RATE_LIMIT_EXCEEDED.String() && e.Code == 429
+}
+
+// 请求频率超限
+func ErrorRateLimitExceeded(format string, args ...interface{}) *errors.Error {
+	return errors.New(429, ErrorReason_RATE_LIMIT_EXCEEDED.String(), fmt.Sprintf(format, args...))
+}
+
+// 验证失败
+func IsAuthenticationFailed(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_AUTHENTICATION_FAILED.String() && e.Code == 401
+}
+
+// 验证失败
+func ErrorAuthenticationFailed(format string, args ...interface{}) *errors.Error {
+	return errors.New(401, ErrorReason_AUTHENTICATION_FAILED.String(), fmt.Sprintf(format, args...))
 }
