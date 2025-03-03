@@ -1,10 +1,10 @@
 package dto
 
 import (
+	"github.com/evernethq/server-common/util/pubsub"
 	"time"
 
 	v1 "github.com/evernethq/server-common/api/network/interface/v1"
-	"github.com/evernethq/server-common/pkg/util/pubsub"
 )
 
 const (

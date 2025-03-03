@@ -3,14 +3,13 @@ package stream
 import (
 	"context"
 	"encoding/json"
+	pkgErrReason "github.com/evernethq/server-common/errors"
+	"github.com/evernethq/server-common/stream/dto"
+	"github.com/evernethq/server-common/util/pubsub"
 	"strings"
 	"time"
 
 	"github.com/evernethq/server-common/api/network/interface/v1"
-	pkgErrReason "github.com/evernethq/server-common/pkg/errors"
-	"github.com/evernethq/server-common/pkg/stream/dto"
-	"github.com/evernethq/server-common/pkg/util/pubsub"
-
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 
