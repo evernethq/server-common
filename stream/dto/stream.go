@@ -1,10 +1,9 @@
 package dto
 
 import (
-	"github.com/evernethq/server-common/util/pubsub"
 	"time"
 
-	v1 "github.com/evernethq/server-common/api/network/interface/v1"
+	"github.com/evernethq/server-common/util/pubsub"
 )
 
 const (
@@ -28,10 +27,23 @@ type ReqContext struct {
 	StartTime time.Time
 }
 
+// DaemonStreamData 定义我们自己需要的数据结构，只包含我们需要的字段
+type DaemonStreamData struct {
+	RequestId string
+	Method    string
+	Payload   string
+}
+
+type DaemonStreamDataInterface interface {
+	GetRequestId() string
+	GetMethod() string
+	GetPayload() string
+}
+
 type ReplyLog struct {
-	Arg       string               // 接收到的参数
-	StartTime time.Time            // 接收数据时间
-	SendData  *v1.DaemonStreamData // 发送的数据
+	Arg       string            // 接收到的参数
+	StartTime time.Time         // 接收数据时间
+	SendData  *DaemonStreamData // 发送的数据
 }
 
 type ForwardingReq struct {

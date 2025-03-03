@@ -3,13 +3,13 @@ package stream
 import (
 	"context"
 	"encoding/json"
-	pkgErrReason "github.com/evernethq/server-common/errors"
-	"github.com/evernethq/server-common/stream/dto"
-	"github.com/evernethq/server-common/util/pubsub"
 	"strings"
 	"time"
 
-	"github.com/evernethq/server-common/api/network/interface/v1"
+	pkgErrReason "github.com/evernethq/server-common/errors"
+	"github.com/evernethq/server-common/stream/dto"
+	"github.com/evernethq/server-common/util/pubsub"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 
@@ -37,8 +37,8 @@ type Base struct {
 }
 
 type Conn interface {
-	Recv() (*v1.DaemonStreamData, error)
-	Send(*v1.DaemonStreamData) error
+	Recv() (*dto.DaemonStreamData, error)
+	Send(*dto.DaemonStreamData) error
 }
 
 func (s *Base) Read(ctx context.Context) error {
@@ -66,7 +66,7 @@ func (s *Base) Read(ctx context.Context) error {
 }
 
 // 处理客户端返回的消息
-func (s *Base) handleReply(req *v1.DaemonStreamData, reply *dto.ReqContext) {
+func (s *Base) handleReply(req *dto.DaemonStreamData, reply *dto.ReqContext) {
 	if req.Method == dto.ACK {
 		reply.ACK = true
 		s.Request.Set(req.RequestId, reply)
@@ -79,12 +79,12 @@ func (s *Base) handleReply(req *v1.DaemonStreamData, reply *dto.ReqContext) {
 }
 
 // 接收处理客户端请求的消息
-func (s *Base) handleNewRequest(ctx context.Context, req *v1.DaemonStreamData) {
+func (s *Base) handleNewRequest(ctx context.Context, req *dto.DaemonStreamData) {
 	if req.Method != dto.ACK {
 		s.SeedCh <- &dto.ReplyLog{
 			Arg:       req.Payload,
 			StartTime: time.Now(),
-			SendData: &v1.DaemonStreamData{
+			SendData: &dto.DaemonStreamData{
 				RequestId: req.RequestId,
 				Method:    dto.ACK,
 				Payload:   "",
@@ -101,11 +101,11 @@ func (s *Base) handleNewRequest(ctx context.Context, req *v1.DaemonStreamData) {
 	}
 }
 
-func (s *Base) HandleReadData(ctx context.Context, data *v1.DaemonStreamData) *dto.ReplyLog {
+func (s *Base) HandleReadData(ctx context.Context, data *dto.DaemonStreamData) *dto.ReplyLog {
 	res := &dto.ReplyLog{
 		Arg:       data.Payload,
 		StartTime: time.Now(),
-		SendData: &v1.DaemonStreamData{
+		SendData: &dto.DaemonStreamData{
 			RequestId: data.RequestId,
 			Method:    data.Method,
 		},
@@ -163,7 +163,7 @@ func (s *Base) Send(ctx context.Context) error {
 func (s *Base) sendRequest(reqData *dto.ReqData) {
 	requestID := uuid.New().String()
 	if reqData != nil {
-		if err := s.Conn.Send(&v1.DaemonStreamData{
+		if err := s.Conn.Send(&dto.DaemonStreamData{
 			RequestId: requestID,
 			Method:    reqData.Method,
 			Payload:   reqData.Payload,
@@ -300,7 +300,7 @@ func SendData(ctx context.Context, in *dto.SendDataReq) error {
 	}
 }
 
-func (s *Base) logRequest(req *v1.DaemonStreamData) {
+func (s *Base) logRequest(req *dto.DaemonStreamData) {
 	s.Log.Debugf("read data: id=%s, args=%s, operation=%s", req.RequestId, req.Payload, req.Method)
 }
 
